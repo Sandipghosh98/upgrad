@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+    <head>
+         <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+
+<style>
+.con{
+
+    background-image: url("https://img.freepik.com/free-vector/green-cricket-sports-background-with-illustration-players-golden-trophy-cup_1302-5494.jpg?size=626&ext=jpg");
+    height: 200px;
+    width: 100%;
+    background-size: cover;
+}
+h1{
+    color:indigo;
+}
+
+</style>
+    </head>
+    <body>
+        <div class="container">
+            <center>
+            <div class="con">
+                <br>
+                <br>
+                <h1>Welcome to live cricket score</h1>
+
+            </div>
+            <br>
+            <br>
+            <label for="time">Choose Date</label>
+        <input type="date" id="time">
+        <button id="btn" class="btn-primary" onclick="display()">
+            Live Scores
+        </button>
+        <div id="nomatch">
+
+        </div>
+        <div id="match">
+          <table class="table table-striped" id="myTable">
+
+
+          </table>
+
+        </div>
+
+</center>
+
+</div>
+
+            <script>
+
+
+             function display(){
+              document.getElementById("myTable").innerHTML="";
+              document.getElementById("nomatch").innerHTML="";
+                 var arr=[];
+                    var today = document.getElementById("time").value;
+                    today=today+"T00:00:00.000Z";
+                    console.log(today);
+                    var t=1;
+                  $.ajax({
+   url: 'https://cricapi.com/api/matches/?apikey=K2yCIhwcRJMcHPOAlNDLPFhwUdD2',
+   type: "GET",
+   dataType:'json',
+   async: false,
+   success: function(response){
+      var a=response.matches.length;
+     // console.log(a);
+     
+      for(var i=0;i<a;i++){
+           var mdate=response.matches[i].date;
+        //   console.log(mdate);
+           if(mdate==today){
+               console.log("equal");
+               arr.push(response.matches[i].unique_id);
+               
+               //console.log(response.matches[i]);
+             //  console.log(response.matches[i].score);
+             var s=response.matches[i].unique_id;
+                                                 $.ajax({
+   url: 'https://cricapi.com/api/cricketScore/?apikey=K2yCIhwcRJMcHPOAlNDLPFhwUdD2&unique_id='+s,
+   type: "GET",
+   dataType:'json',
+   success: function(response){
+var e=3;
+      if(response.matchStarted==true){
+        var td = document.createElement('td');  
+      
+        var element;
+        console.log(response);
+        console.log(response["team-1"]);
+        console.log(response["team-2"]);
+        var f=response.score;
+        for (let index = 0; index < f.length; index++) {
+           element = f[index];
+         
+           if(element=='/'){
+             
+            var table = document.getElementById("myTable");
+  var row = table.insertRow();
+  var cell1 = row.insertCell(0);
+  var cell2 = row.insertCell(1);
+  var cell3 = row.insertCell(2);
+  var cell4 = row.insertCell(3);
+  cell1.innerHTML ='<strong>'+'match'+t+'</strong>';
+  
+  t=t+1;
+  
+  
+  cell2.innerHTML = f.substring(0,index+3);
+  cell3.innerHTML = f.substring(index+6,f.length);
+  cell4.innerHTML = "";
+  
+          console.log(f.substring(0,index+3));
+          console.log(f.substring(index+6,f.length));
+       break;
+        }}
+       // console.log(f.substring[index-6,f.length]);
+        e=6;
+      }
+      else{
+        var table = document.getElementById("myTable");
+  var row = table.insertRow();
+  var cell1 = row.insertCell(0);
+  var cell2 = row.insertCell(1);
+  var cell3 = row.insertCell(2);
+  var cell4 = row.insertCell(3);
+  cell1.innerHTML ='<strong>'+'match'+t+'</strong>';
+  console.log(t);
+  t=t+1;
+  console.log(t);
+  
+  cell2.innerHTML = response["team-1"];
+  cell3.innerHTML = response["team-2"];
+  cell4.innerHTML = "not yet started";
+        console.log(response["team-1"]);
+        console.log(response["team-2"]);
+        console.log("not yet started");
+      }
+   }
+ })
+
+
+           }
+         
+      }
+    // console.log(arr);
+     }
+
+
+     
+})
+console.log(arr.length);
+if(arr.length==0){
+  document.getElementById("nomatch").innerHTML="No match in this date from my data";
+}
+
+                  }
+                    </script>
+    </body>
+</html>

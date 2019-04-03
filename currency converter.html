@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html> 
+<head>
+   <title></title>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<style>
+table{
+    background-color: gray;
+    width: 50%;
+    height: 200px;
+    
+}
+select{
+    width: 180px;
+}
+
+
+</style>
+</head>
+<body>
+<center>
+<div class="main">
+    <table>
+<tr>
+<td>Currency I have</td>
+<td>Currency I want</td>
+<tr>
+    <td>
+    </td>
+    <td></td>
+</tr>
+</tr>
+
+
+
+        <tr>
+            <td>
+<select id="mySelect">
+<option value="INR">INR</option>
+</select>
+</td>
+<td>
+<select id="mySelect1">
+
+    </select>
+    </td>
+    </tr>
+<tr></tr>
+<tr></tr>
+<tr>
+<td>Amount</td>
+<td>Amount</td>
+
+</tr>
+
+    <tr>
+
+    <td>
+    <input type="number" id="num" value="1">
+    </td>
+    <td>
+            <input type="number" id="val" >
+    </td>
+    </tr>
+    <br>
+    <tr>
+        <td colspan="2">
+    <button id="btn" onclick="calculate()">Convert</button>
+    </td>
+    </tr>
+   
+    </table>
+    </div>
+    </center>
+    <script>
+        $.ajax({
+   url: 'https://free.currencyconverterapi.com/api/v6/countries?apiKey=7772e4d6cdb429eb9d6e',
+   type: "GET",
+   dataType:'json',
+   success: function(response){
+       for( r in response.results){
+          
+//console.log(response.results[r].currencySymbol+" "+response.results[r].currencyId);
+var x = document.getElementById("mySelect");
+var option = document.createElement("option");
+option.text = response.results[r].currencyId;
+option.value=response.results[r].currencyId;
+x.add(option);
+       }
+     }
+})
+
+$.ajax({
+   url: 'https://free.currencyconverterapi.com/api/v6/countries?apiKey=7772e4d6cdb429eb9d6e',
+   type: "GET",
+   dataType:'json',
+   success: function(response){
+       for( r in response.results){
+          
+//console.log(response.results[r].currencySymbol+" "+response.results[r].currencyId);
+var x = document.getElementById("mySelect1");
+var option = document.createElement("option");
+option.text = response.results[r].currencyId;
+option.value=response.results[r].currencyId;
+x.add(option);
+       }
+     }
+})
+
+        function calculate(){
+         var n=document.getElementById("num").value;
+         var a=document.getElementById("mySelect").value;
+        var b=document.getElementById("mySelect1").value;
+        console.log(a+"_"+b);
+         var q=a+"_"+b;
+      $.ajax({
+   url: 'https://free.currencyconverterapi.com/api/v6/convert?q='+q+'&compact=ultra&apiKey=7772e4d6cdb429eb9d6e',
+   type: "GET",
+
+   success: function(response){
+       console.log(response);
+       for(r in response){
+         
+       }
+           document.getElementById("val").value=(response[r])*n;
+     }
+})
+        }
+    </script>
+</body>
+</html>
